@@ -316,6 +316,55 @@
                 font-size: 12px;
             }
         }
+
+        /* Small mobile screens - fix input container overflow */
+        @media (max-width: 600px) {
+            .chat-container {
+                padding: 15px;
+            }
+            
+            .input-container {
+                flex-direction: column;
+                gap: 12px;
+                padding: 16px;
+                align-items: stretch;
+            }
+            
+            .input-field {
+                min-height: 20px;
+                padding: 8px 0;
+            }
+            
+            .voice-controls {
+                justify-content: center;
+            }
+            
+            .control-btn {
+                padding: 8px 10px;
+                font-size: 12px;
+                min-width: 40px;
+            }
+            
+            .send-btn {
+                padding: 12px 24px;
+                font-size: 14px;
+                align-self: center;
+                min-width: 80px;
+            }
+            
+            .toggle-container {
+                margin-bottom: 16px;
+            }
+            
+            .messages {
+                padding: 15px 0;
+            }
+            
+            .message {
+                max-width: 90%;
+                padding: 14px 16px;
+            }
+        }
     </style>
 </head>
 <body>
