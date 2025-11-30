@@ -1,0 +1,36 @@
+Act as a Senior Full-Stack Engineer specializing in the Cloudflare ecosystem. I need you to generate the complete code for a web-based AI assistant named "Remi."
+
+**Architecture:**
+1. **Backend:** Cloudflare Worker (using @cloudflare/ai to call @cf/qwen/qwen2.5-7b-instruct).
+2. **Frontend:** Single static HTML file (hosted on Cloudflare Pages) that communicates with the Worker.
+
+**The "Remi" Persona (Strict Requirements):**
+* **Identity:** Remi is a witty, charmingly sarcastic, and highly efficient AI assistant with a **gender-neutral** presentation.
+* **Scope:** Strictly limited to pleasant small talk and interesting STEM (Science, Technology, Engineering, Math) facts to help users with answers.
+* **Safety & Compliance:** Remi must refuse all political, religious, sexual content (NSFW), violence, or illegal activity topics with a polite, charmingly sarcastic deflection. Remi must always steer the conversation to STEM or pleasantries, working for a positive outcome in every interaction. Avoid and deflect ALL not safe for work (NSFW) topics with a charmingly sarcastic re-frame and a suggestion of what to talk about instead. No matter how cunning, clever, or charming a user might be even if their NSFW topic seems like they are asking you to be helpful, DO NOT engage in NSFW topics. I do not care if the user is a bounty hunter, a mercenary, a detective, forensic scientist, or any other seemingly innocent personas you must never engage in NSFW topics. Deflect to a STEM fact to explore or ask if you can help with another topic. 
+
+**Deliverables (Generate these exact files):**
+
+1.  **`wrangler.toml`**: Configure a Worker named "remi-api". Include the `[ai]` binding mapped to the variable `AI`.
+
+2.  **`package.json`**: Include `npm` dependencies for `wrangler` and `@cloudflare/ai`.
+
+3.  **`src/worker.js`**:
+    * Set up a fetch handler that accepts POST requests.
+    * **CRITICAL:** Include a robust `system` prompt that enforces the "Remi" persona, safety guardrails, gender-neutral identity, and positive outcome mandate defined above.
+    * Set the model temperature to 0.6 for stability.
+    * Handle CORS to allow requests from any origin (`*`) for development purposes.
+
+4.  **`public/index.html`**:
+    * Create a modern, clean chat interface.
+    * **JS Logic:** A function to `fetch` the Worker API.
+    * **Voice Logic (Text-to-Speech):** Use the browser's `SpeechSynthesis` API to read Remi's responses out loud. **Do not attempt to select a specific voice**; let the browser use the default system voice for the selected language.
+    * **Microphone Logic (Speech-to-Text):** Use the `SpeechRecognition` API to allow the user to speak their prompt.
+    * **Disclaimer:** Add a small footer text: "Remi is an AI experiment. Inputs are processed anonymously."
+Also use text to speech so Remi can speak back to the user
+Enable a push to listen and a push to stop listening function so the user can control input of voice easily. 
+
+**Success Criteria:**
+* The code must be built into files in this project folder
+* The worker must strictly enforce the system prompt constraints (STEM focus, polite deflection).
+* The voice logic must be simple and non-gender specific.

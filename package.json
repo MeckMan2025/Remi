@@ -1,0 +1,16 @@
+{
+  "name": "remi-ai-assistant",
+  "version": "1.0.0",
+  "description": "Remi AI Assistant - A STEM-focused AI chatbot",
+  "main": "src/worker.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "@cloudflare/ai": "^1.0.0"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}
