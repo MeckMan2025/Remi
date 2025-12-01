@@ -52,6 +52,9 @@
             padding: 16px 20px;
             border-bottom: 1px solid #FFF2CC;
             flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .header-content {
@@ -140,6 +143,9 @@
             gap: 12px;
             height: 56px;
             flex-shrink: 0;
+            position: relative;
+            z-index: 50;
+            transition: transform 0.2s ease;
         }
 
         .input-field {
@@ -644,12 +650,28 @@
             if (window.visualViewport) {
                 const viewport = window.visualViewport;
                 const appContainer = document.querySelector('.app-container');
+                const inputContainer = document.querySelector('.input-container');
                 
                 function resizeHandler() {
                     const height = viewport.height;
                     const offsetTop = viewport.offsetTop;
-                    appContainer.style.height = `${height - 16}px`;
-                    appContainer.style.transform = `translateY(${offsetTop}px)`;
+                    const scale = viewport.scale || 1;
+                    
+                    // Keep app container at original size and position
+                    appContainer.style.height = `calc(100vh - 16px)`;
+                    appContainer.style.transform = 'translateY(0)';
+                    
+                    // Move only the input container above keyboard
+                    if (height < window.innerHeight) {
+                        // Keyboard is showing
+                        const keyboardHeight = window.innerHeight - height;
+                        inputContainer.style.transform = `translateY(-${keyboardHeight}px)`;
+                        inputContainer.style.position = 'sticky';
+                        inputContainer.style.bottom = '0';
+                    } else {
+                        // Keyboard is hidden
+                        inputContainer.style.transform = 'translateY(0)';
+                    }
                 }
                 
                 viewport.addEventListener('resize', resizeHandler);
