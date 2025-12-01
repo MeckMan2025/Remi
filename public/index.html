@@ -14,6 +14,7 @@
         html {
             height: 100%;
             overflow: hidden;
+            background-color: #000000;
         }
 
         body {
@@ -22,26 +23,20 @@
             color: #ffffff;
             height: 100%;
             overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
             margin: 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            padding-top: env(safe-area-inset-top, 20px);
-            padding-bottom: env(safe-area-inset-bottom, 20px);
+            padding: 0;
         }
 
+        /* Desktop layout - centered container */
         .app-container {
             width: 100%;
             max-width: 900px;
-            height: calc(100vh - 40px);
+            height: 100vh;
+            height: 100dvh;
             background-color: #000000;
             border: 2px solid #2A2A2A;
             border-radius: 16px;
+            margin: 0 auto;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -49,26 +44,39 @@
             position: relative;
         }
 
+        /* Desktop body centering */
+        body.desktop {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Fixed header */
         .header {
             background-color: #2A2A2A;
             padding: 16px 20px;
             border-bottom: 1px solid #FFF2CC;
-            flex-shrink: 0;
-            position: relative;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
             z-index: 100;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .header-content {
             display: flex;
-            flex-direction: row;
             align-items: center;
-            justify-content: center;
             gap: 16px;
         }
 
         .remi-avatar {
-            width: 60px;
-            height: 60px;
+            width: 48px;
+            height: 48px;
             border-radius: 12px;
             border: 2px solid #FFF2CC;
             object-fit: cover;
@@ -79,41 +87,105 @@
         .header-text {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 2px;
         }
 
         .header h1 {
             color: #FFF2CC;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 300;
             margin: 0;
         }
 
         .header-subtitle {
             color: #CCCCCC;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 400;
             margin: 0;
         }
 
-        .chat-container {
-            flex: 1;
+        /* Deep Dig toggle in header */
+        .toggle-container {
             display: flex;
-            flex-direction: column;
-            width: 100%;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #2A2A2A;
+            border: 1px solid #FFF2CC;
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 2px;
+            bottom: 2px;
+            background-color: #FFF2CC;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #2A2A2A;
+        }
+
+        input:checked + .toggle-slider:before {
+            background-color: #CC0000;
+            transform: translateX(20px);
+        }
+
+        .toggle-label {
+            color: #FFF2CC;
+            font-size: 11px;
+            font-weight: 500;
+            user-select: none;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        /* Scrolling chat area */
+        .chat-container {
+            position: absolute;
+            top: 80px;
+            bottom: 56px;
+            left: 0;
+            right: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
             padding: 20px;
-            overflow: hidden;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
         }
 
         .messages {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding: 20px 0;
             display: flex;
             flex-direction: column;
             gap: 20px;
-            -webkit-overflow-scrolling: touch;
+            min-height: 100%;
         }
 
         .message {
@@ -134,6 +206,7 @@
             align-self: flex-start;
         }
 
+        /* Fixed input container */
         .input-container {
             background-color: #2A2A2A;
             border-top: 1px solid #FFF2CC;
@@ -143,10 +216,11 @@
             align-items: center;
             gap: 12px;
             height: 56px;
-            flex-shrink: 0;
-            position: relative;
-            z-index: 50;
-            transition: transform 0.2s ease;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
         }
 
         .input-field {
@@ -157,12 +231,6 @@
             font-size: 16px;
             outline: none;
             padding: 8px 12px;
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.2s ease;
-        }
-
-        .input-field:focus {
-            border-bottom-color: #FFF2CC;
         }
 
         .input-field::placeholder {
@@ -238,74 +306,16 @@
             fill: currentColor;
         }
 
-        .toggle-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-            justify-content: center;
-        }
-
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
+        .footer {
             position: absolute;
-            cursor: pointer;
-            top: 0;
+            bottom: 56px;
             left: 0;
             right: 0;
-            bottom: 0;
-            background-color: #2A2A2A;
-            border: 1px solid #FFF2CC;
-            border-radius: 24px;
-            transition: 0.3s;
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 2px;
-            bottom: 2px;
-            background-color: #FFF2CC;
-            border-radius: 50%;
-            transition: 0.3s;
-        }
-
-        input:checked + .toggle-slider {
-            background-color: #2A2A2A;
-        }
-
-        input:checked + .toggle-slider:before {
-            background-color: #CC0000;
-            transform: translateX(26px);
-        }
-
-        .toggle-label {
-            color: #FFF2CC;
-            font-size: 14px;
-            font-weight: 500;
-            user-select: none;
-            cursor: pointer;
-        }
-
-        .footer {
             text-align: center;
-            padding: 16px;
+            padding: 8px;
             color: #CCCCCC;
-            font-size: 12px;
+            font-size: 10px;
+            background-color: rgba(0, 0, 0, 0.8);
             border-top: 1px solid #2A2A2A;
         }
 
@@ -313,6 +323,8 @@
             display: none;
             color: #CCCCCC;
             font-style: italic;
+            text-align: center;
+            padding: 20px;
         }
 
         .error {
@@ -325,140 +337,115 @@
             text-align: center;
         }
 
-        /* Mobile responsiveness and keyboard handling */
+        /* Mobile layout overrides */
         @media (max-width: 768px) {
             body {
-                padding: 8px;
-                padding-top: 8px; /* Will be adjusted by JS based on browser */
-                padding-bottom: max(8px, env(safe-area-inset-bottom));
+                padding: 0;
             }
-            
-            /* Chrome-specific adjustments */
-            body.chrome-mobile {
-                padding-top: 4px;
+
+            body.desktop {
+                display: block;
+                padding: 0;
             }
-            
-            /* Safari-specific adjustments */
-            body.safari-mobile {
-                padding-top: max(8px, env(safe-area-inset-top));
-            }
-            
-            /* Safari mobile - add top border for separation from browser chrome */
-            body.safari-mobile .app-container {
-                border-top: 3px solid #FFF2CC;
-                box-shadow: 0 -2px 8px rgba(255, 242, 204, 0.15), 0 8px 32px rgba(255, 242, 204, 0.1);
-            }
-            
+
             .app-container {
-                height: calc(100vh - 16px);
-                height: calc(100dvh - 16px); /* Dynamic viewport for mobile browsers */
-                border-radius: 12px;
-                min-height: 0;
-                max-height: calc(100vh - 16px);
+                width: 100%;
+                height: 100vh;
+                height: 100dvh;
+                border: none;
+                border-radius: 0;
+                margin: 0;
+                max-width: none;
             }
-            
+
             .header {
-                padding: 12px 16px;
+                padding-top: max(16px, env(safe-area-inset-top));
+                height: auto;
+                min-height: 70px;
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
             }
-            
+
+            .header-main {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+            }
+
             .header-content {
                 gap: 12px;
             }
-            
-            .remi-avatar {
-                width: 50px;
-                height: 50px;
-            }
-            
-            .header h1 {
-                font-size: 20px;
-            }
-            
-            .header-subtitle {
-                font-size: 12px;
-            }
-        }
 
-        /* Small mobile screens - optimize for ultra-minimal design */
-        @media (max-width: 600px) {
-            body {
-                padding: 4px;
-                padding-top: 4px; /* Will be adjusted by JS based on browser */
-                padding-bottom: max(4px, env(safe-area-inset-bottom));
+            .remi-avatar {
+                width: 40px;
+                height: 40px;
             }
-            
-            /* Chrome mobile small screens */
-            body.chrome-mobile {
-                padding-top: 2px;
+
+            .header h1 {
+                font-size: 18px;
             }
-            
-            /* Safari mobile small screens */
-            body.safari-mobile {
-                padding-top: max(4px, env(safe-area-inset-top));
+
+            .header-subtitle {
+                font-size: 11px;
             }
-            
-            /* Safari mobile small screens - enhanced separation */
-            body.safari-mobile .app-container {
-                border-top: 2px solid #FFF2CC;
-                box-shadow: 0 -1px 4px rgba(255, 242, 204, 0.2), 0 8px 32px rgba(255, 242, 204, 0.1);
+
+            .toggle-container {
+                margin-top: 4px;
             }
-            
-            .app-container {
-                height: calc(100vh - 8px);
-                height: calc(100dvh - 8px);
-                border-radius: 8px;
-                max-height: calc(100vh - 8px);
-            }
-            
-            .header {
-                padding: 10px 16px;
-            }
-            
+
             .chat-container {
-                padding: 12px;
-                min-height: 0;
-                flex: 1;
-                overflow: hidden;
+                top: 70px;
+                bottom: 50px;
+                padding: 15px;
             }
-            
+
             .input-container {
+                height: 50px;
                 padding: 6px 12px;
                 gap: 8px;
-                height: 50px;
-                position: relative;
+                padding-bottom: max(6px, env(safe-area-inset-bottom));
             }
-            
-            .input-field {
-                padding: 6px 8px;
-                font-size: 16px;
-                /* Prevent zoom on iOS */
-            }
-            
+
             .icon-btn, .send-btn {
-                width: 38px;
-                height: 38px;
-                padding: 9px;
+                width: 40px;
+                height: 40px;
+                padding: 10px;
             }
-            
+
             .icon-btn svg, .send-btn svg {
                 width: 16px;
                 height: 16px;
             }
-            
-            .toggle-container {
-                margin-bottom: 12px;
-            }
-            
-            .messages {
-                padding: 12px 0;
-                scroll-behavior: smooth;
-                flex: 1;
-                overflow-y: auto;
-            }
-            
+
             .message {
-                max-width: 92%;
-                padding: 12px 14px;
+                max-width: 85%;
+                padding: 14px 16px;
+            }
+
+            .footer {
+                bottom: 50px;
+                padding: 4px;
+                font-size: 9px;
+            }
+        }
+
+        /* Chrome mobile specific */
+        @media (max-width: 768px) {
+            body.chrome-mobile .header {
+                padding-top: 12px;
+            }
+
+            body.chrome-mobile .chat-container {
+                top: 66px;
+            }
+        }
+
+        /* Safari mobile specific */
+        @media (max-width: 768px) {
+            body.safari-mobile .header {
+                padding-top: max(16px, env(safe-area-inset-top));
             }
         }
     </style>
@@ -466,28 +453,31 @@
 <body>
     <div class="app-container">
         <div class="header">
-        <div class="header-content">
-            <img src="./Remi.jpeg" alt="Remi AI Assistant" class="remi-avatar">
-            <div class="header-text">
-                <h1>Remi</h1>
-                <div class="header-subtitle">STEM-Focused AI Assistant</div>
+            <div class="header-main">
+                <div class="header-content">
+                    <img src="./Remi.jpeg" alt="Remi AI Assistant" class="remi-avatar">
+                    <div class="header-text">
+                        <h1>Remi</h1>
+                        <div class="header-subtitle">STEM-Focused AI Assistant</div>
+                    </div>
+                </div>
+                <div class="toggle-container">
+                    <span class="toggle-label">Deep Dig 🦴</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="deepDigToggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="chat-container">
-        <div class="messages" id="messages">
-            <div class="ai-message">
-                <p>Hello! I'm Remi, your friendly AI assistant. I love discussing STEM topics and having pleasant conversations. What would you like to chat about today?</p>
+        <div class="chat-container">
+            <div class="messages" id="messages">
+                <div class="ai-message">
+                    <p>Hello! I'm Remi, your friendly AI assistant. I love discussing STEM topics and having pleasant conversations. What would you like to chat about today?</p>
+                </div>
             </div>
-        </div>
-
-        <div class="toggle-container">
-            <span class="toggle-label">Deep Dig Mode 🦴</span>
-            <label class="toggle-switch">
-                <input type="checkbox" id="deepDigToggle">
-                <span class="toggle-slider"></span>
-            </label>
+            <div class="loading" id="loading">Remi is thinking...</div>
         </div>
 
         <div class="input-container">
@@ -516,9 +506,6 @@
             </button>
         </div>
 
-        <div class="loading" id="loading">Remi is thinking...</div>
-    </div>
-
         <div class="footer">
             Remi is an AI experiment. Inputs are processed anonymously.
         </div>
@@ -540,6 +527,31 @@
         let textToSpeechEnabled = false;
         let recognition = null;
 
+        // Browser detection
+        function detectBrowser() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const isChrome = userAgent.includes('chrome') && !userAgent.includes('edg');
+            const isSafari = userAgent.includes('safari') && !userAgent.includes('chrome');
+            const isFirefox = userAgent.includes('firefox');
+            
+            return { isChrome, isSafari, isFirefox };
+        }
+
+        // Apply browser-specific classes
+        function setupBrowserSpecificStyling() {
+            const { isChrome, isSafari } = detectBrowser();
+            
+            if (window.innerWidth <= 768) {
+                if (isChrome) {
+                    document.body.classList.add('chrome-mobile');
+                } else if (isSafari) {
+                    document.body.classList.add('safari-mobile');
+                }
+            } else {
+                document.body.classList.add('desktop');
+            }
+        }
+
         // Initialize Speech Recognition
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -549,12 +561,12 @@
             recognition.lang = 'en-US';
 
             recognition.onstart = () => {
-                updateMicButton(true);
+                micBtn.classList.add('listening');
             };
 
             recognition.onend = () => {
                 isListening = false;
-                updateMicButton(false);
+                micBtn.classList.remove('listening');
             };
 
             recognition.onresult = (event) => {
@@ -567,7 +579,7 @@
                 console.error('Speech recognition error:', event.error);
                 showError('Speech recognition failed. Please try again.');
                 isListening = false;
-                updateMicButton(false);
+                micBtn.classList.remove('listening');
             };
         } else {
             micBtn.style.display = 'none';
@@ -695,109 +707,22 @@
                 .replace(/'/g, "&#039;");
         }
 
-        // Browser detection and mobile handling
-        function detectBrowser() {
-            const userAgent = navigator.userAgent.toLowerCase();
-            const isChrome = userAgent.includes('chrome') && !userAgent.includes('edg');
-            const isSafari = userAgent.includes('safari') && !userAgent.includes('chrome');
-            const isFirefox = userAgent.includes('firefox');
-            
-            return { isChrome, isSafari, isFirefox };
-        }
-        
-        function adjustForBrowser() {
-            const { isChrome, isSafari } = detectBrowser();
-            const appContainer = document.querySelector('.app-container');
-            const body = document.body;
-            
-            if (window.innerWidth <= 768) {
-                if (isChrome) {
-                    // Chrome has persistent address bar at top
-                    body.style.paddingTop = '4px';
-                    appContainer.style.marginTop = '0';
-                } else if (isSafari) {
-                    // Safari hides address bar, use safe-area-inset
-                    body.style.paddingTop = 'max(8px, env(safe-area-inset-top))';
-                } else {
-                    // Default for other browsers
-                    body.style.paddingTop = '8px';
-                }
-            }
-        }
-        
-        // Mobile keyboard handling
-        function handleKeyboard() {
-            if (window.visualViewport) {
-                const viewport = window.visualViewport;
-                const appContainer = document.querySelector('.app-container');
-                const chatContainer = document.querySelector('.chat-container');
-                
-                function resizeHandler() {
-                    const viewportHeight = viewport.height;
-                    const offsetTop = viewport.offsetTop;
-                    const windowHeight = window.innerHeight;
-                    
-                    if (viewportHeight < windowHeight * 0.75) {
-                        // Keyboard is showing - resize the entire app to fit above keyboard
-                        const availableHeight = viewportHeight - offsetTop;
-                        appContainer.style.height = `${availableHeight - 16}px`;
-                        appContainer.style.transform = `translateY(${offsetTop}px)`;
-                        
-                        // Ensure chat container can scroll properly
-                        chatContainer.style.minHeight = '0';
-                        chatContainer.style.flex = '1 1 0';
-                    } else {
-                        // Keyboard is hidden - restore original size
-                        appContainer.style.height = 'calc(100vh - 40px)';
-                        appContainer.style.transform = 'translateY(0)';
-                    }
-                }
-                
-                viewport.addEventListener('resize', resizeHandler);
-                resizeHandler();
-            }
-        }
-        
         // Initialize
+        setupBrowserSpecificStyling();
         speakBtn.classList.add('active'); // Show TTS is disabled by default
         speakBtn.title = 'Enable text-to-speech';
-        
-        // Setup browser-specific adjustments
-        adjustForBrowser();
-        
-        // Add browser class to body for CSS targeting
-        const { isChrome, isSafari } = detectBrowser();
-        if (window.innerWidth <= 768) {
-            if (isChrome) {
-                document.body.classList.add('chrome-mobile');
-            } else if (isSafari) {
-                document.body.classList.add('safari-mobile');
-            }
-            handleKeyboard();
-        }
-        
-        // Handle orientation changes
-        window.addEventListener('orientationchange', () => {
-            setTimeout(() => {
-                adjustForBrowser();
-            }, 100);
-        });
         
         // Focus input but prevent auto-scroll on mobile
         if (window.innerWidth > 768) {
             messageInput.focus();
         }
-        
-        // Update microphone button states
-        function updateMicButton(listening) {
-            if (listening) {
-                micBtn.classList.add('listening');
-                micBtn.title = 'Stop listening';
-            } else {
-                micBtn.classList.remove('listening');
-                micBtn.title = 'Push to talk';
-            }
-        }
+
+        // Handle orientation changes
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                setupBrowserSpecificStyling();
+            }, 100);
+        });
     </script>
 </body>
 </html>
