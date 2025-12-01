@@ -343,6 +343,12 @@
                 padding-top: max(8px, env(safe-area-inset-top));
             }
             
+            /* Safari mobile - add top border for separation from browser chrome */
+            body.safari-mobile .app-container {
+                border-top: 3px solid #FFF2CC;
+                box-shadow: 0 -2px 8px rgba(255, 242, 204, 0.15), 0 8px 32px rgba(255, 242, 204, 0.1);
+            }
+            
             .app-container {
                 height: calc(100vh - 16px);
                 height: calc(100dvh - 16px); /* Dynamic viewport for mobile browsers */
@@ -389,6 +395,12 @@
             /* Safari mobile small screens */
             body.safari-mobile {
                 padding-top: max(4px, env(safe-area-inset-top));
+            }
+            
+            /* Safari mobile small screens - enhanced separation */
+            body.safari-mobile .app-container {
+                border-top: 2px solid #FFF2CC;
+                box-shadow: 0 -1px 4px rgba(255, 242, 204, 0.2), 0 8px 32px rgba(255, 242, 204, 0.1);
             }
             
             .app-container {
