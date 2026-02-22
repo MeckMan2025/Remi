@@ -1,7 +1,5 @@
 export default {
   async fetch(request, env, ctx) {
-    const url = new URL(request.url);
-
     if (request.method === 'OPTIONS') {
       return new Response(null, {
         headers: {
@@ -12,21 +10,9 @@ export default {
       });
     }
 
-    // API route for chat
-    if (url.pathname === '/api/chat' && request.method === 'POST') {
-      return handleChat(request, env);
+    if (request.method !== 'POST') {
+      return new Response('Method not allowed', { status: 405 });
     }
-
-    // Legacy: accept POST to root for backward compatibility
-    if (url.pathname === '/' && request.method === 'POST') {
-      return handleChat(request, env);
-    }
-
-    return new Response('Not found', { status: 404 });
-  },
-};
-
-async function handleChat(request, env) {
 
     try {
       const { message, useDeepDig = false } = await request.json();
@@ -88,4 +74,5 @@ Keep responses concise and engaging. Focus on being helpful while maintaining yo
         },
       });
     }
-}
+  },
+};

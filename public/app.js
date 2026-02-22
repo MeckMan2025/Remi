@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  var API_URL = "/api/chat";
+  var API_URL = "https://remi-api.andrew-meckley1981.workers.dev";
   var isLoading = false;
 
   var chatArea = document.getElementById("chatArea");
