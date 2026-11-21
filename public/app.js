@@ -3,6 +3,9 @@
 
   var API_URL = "https://remi-api.andrew-meckley1981.workers.dev";
   var isLoading = false;
+  // Conversation so far, sent with each message so Remi remembers context.
+  // Lives only in this tab; a page reload starts a fresh chat.
+  var history = [];
 
   var chatArea = document.getElementById("chatArea");
   var promptInput = document.getElementById("promptInput");
@@ -116,7 +119,7 @@
     fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: prompt, useDeepDig: useDeepDig }),
+      body: JSON.stringify({ message: prompt, useDeepDig: useDeepDig, history: history }),
     })
       .then(function (res) {
         return res.json().then(function (data) {
@@ -128,6 +131,9 @@
       })
       .then(function (data) {
         loader.remove();
+        history.push({ role: "user", content: prompt });
+        history.push({ role: "assistant", content: data.response });
+        if (history.length > 40) history = history.slice(-40);
         addBotMessage(data.response);
         speakText(data.response);
       })

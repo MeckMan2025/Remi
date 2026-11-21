@@ -112,8 +112,8 @@ Remi/
 - **Error Handling**: Comprehensive error management
 
 ### Inference Models
-- **Standard**: `@cf/meta/llama-3.1-8b-instruct` (Fast, creative responses)
-- **Deep Dig**: `@cf/meta/llama-3.1-70b-instruct` (Thorough, precise analysis)
+- **Standard**: `@cf/meta/llama-4-scout-17b-16e-instruct` (Fast, creative responses)
+- **Deep Dig**: `@cf/meta/llama-3.3-70b-instruct-fp8-fast` (Thorough, precise analysis)
 
 ## 🎮 Usage Guide
 

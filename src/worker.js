@@ -15,7 +15,7 @@ export default {
     }
 
     try {
-      const { message, useDeepDig = false } = await request.json();
+      const { message, useDeepDig = false, history = [] } = await request.json();
 
       if (!message) {
         return new Response(JSON.stringify({ error: 'Message is required' }), {
@@ -45,18 +45,22 @@ Your personality:
 Keep responses concise and engaging. Focus on being helpful while maintaining your charming personality.`;
 
       // Tiered Inference: Select model and temperature based on Deep Dig Mode
-      const modelName = useDeepDig ? '@cf/meta/llama-3.1-70b-instruct' : '@cf/meta/llama-3.1-8b-instruct';
+      const modelName = useDeepDig ? '@cf/meta/llama-3.3-70b-instruct-fp8-fast' : '@cf/meta/llama-4-scout-17b-16e-instruct';
       const temperature = useDeepDig ? 0.3 : 0.6;
 
       const response = await env.AI.run(modelName, {
         messages: [
           { role: 'system', content: systemPrompt },
+          ...cleanHistory(history),
           { role: 'user', content: message }
         ],
         temperature: temperature
       });
 
-      return new Response(JSON.stringify({ response: response.response }), {
+      // Newer models return an OpenAI-style shape; older ones return { response }.
+      const reply = response?.response ?? response?.choices?.[0]?.message?.content ?? '';
+
+      return new Response(JSON.stringify({ response: reply }), {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
@@ -66,6 +70,7 @@ Keep responses concise and engaging. Focus on being helpful while maintaining yo
       });
 
     } catch (error) {
+      console.error('Remi AI error:', error);
       return new Response(JSON.stringify({ error: 'Internal server error' }), {
         status: 500,
         headers: {
@@ -76,3 +81,15 @@ Keep responses concise and engaging. Focus on being helpful while maintaining yo
     }
   },
 };
+
+// Keep only recent user/assistant turns so clients cannot inject a system prompt
+// and long chats stay within the model's context window.
+const MAX_TURNS = 20;
+const MAX_CHARS = 2000;
+function cleanHistory(history) {
+  if (!Array.isArray(history)) return [];
+  return history
+    .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string' && m.content.trim())
+    .slice(-MAX_TURNS)
+    .map((m) => ({ role: m.role, content: m.content.slice(0, MAX_CHARS) }));
+}
